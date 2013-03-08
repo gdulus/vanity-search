@@ -12,26 +12,25 @@ grails.project.dependency.resolution = {
     legacyResolve false // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
     repositories {
         grailsCentral()
-        // uncomment the below to enable remote dependency resolution
-        // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
-        //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenLocal()
+        mavenCentral()
     }
     dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // runtime 'mysql:mysql-connector-java:5.1.21'
+        // for some reason this doesn't work - jar inlcuded in lib folder
+        // jar is resolved but not included into plugin classpath
+        // TODO: resolve this plugin with default artifact dependency mechanism
+        compile('org.apache.solr:solr-solrj:4.1.0'){
+            exclude group:'org.slf4j'
+            exclude group: 'commons-codec'
+        }
     }
 
     plugins {
-        build(":tomcat:$grailsVersion",
-              ":release:2.2.0",
-              ":rest-client-builder:1.0.3") {
+        build(":release:2.2.0") {
             export = false
         }
     }
 }
+
+
+
