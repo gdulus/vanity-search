@@ -13,7 +13,7 @@ import vanity.search.SearchEngineQueryExecutor
 
 class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
 
-    private static final String QUERY_FIELD = 'q'
+    private static final String DEFAULT_FIELD = 'text'
 
     SolrServer solrServer
 
@@ -23,7 +23,8 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         }
 
         SolrParams parameters = new SolrQuery();
-        parameters.set(QUERY_FIELD, "text:*${query}*");
+        parameters.setQuery("$DocumentSpecification.Aricle.TAGS_FIELD:$query^10 OR $DocumentSpecification.Aricle.TITLE_FIELD:$query~0.7^5 OR $DEFAULT_FIELD:$query")
+        parameters.setSortField(DocumentSpecification.Aricle.CREATED_FIELD, SolrQuery.ORDER.desc)
         QueryResponse response = solrServer.query(parameters)
         SolrDocumentList list = response.getResults();
         return list.collect {
