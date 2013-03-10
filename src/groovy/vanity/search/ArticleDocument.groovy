@@ -2,7 +2,7 @@ package vanity.search
 
 final class ArticleDocument {
 
-    final Long id
+    final String id
 
     final String title
 
@@ -14,7 +14,7 @@ final class ArticleDocument {
 
     final Set<String> tags
 
-    ArticleDocument(Long id, String title, String body, String source, Date created, Set<String> tags) {
+    ArticleDocument(String id, String title, String body, String source, Date created, Set<String> tags) {
         this.id = id
         this.title = title
         this.body = body

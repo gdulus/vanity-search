@@ -1,14 +1,16 @@
 package vanity.search
 
+import vanity.ContentSource
+
 class ArticleSearchResult {
 
-    final Long id
+    final String id
 
     final String title
 
-    final String source
+    final ContentSource source
 
-    ArticleSearchResult(Long id, String title, String source) {
+    ArticleSearchResult(String id, String title, ContentSource source) {
         this.id = id
         this.title = title
         this.source = source
