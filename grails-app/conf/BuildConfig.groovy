@@ -16,7 +16,7 @@ grails.project.dependency.resolution = {
         mavenCentral()
     }
     dependencies {
-        // for some reason this doesn't work - jar inlcuded in lib folder
+        // for some reason this doesn't work - jar included in lib folder
         // jar is resolved but not included into plugin classpath
         // TODO: resolve this plugin with default artifact dependency mechanism
         compile('org.apache.solr:solr-solrj:4.1.0'){

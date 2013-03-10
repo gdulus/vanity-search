@@ -1,6 +1,7 @@
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
 import vanity.search.solr.SolrDocumentSerializer
 import vanity.search.solr.SolrSearchEngineIndexer
+import vanity.search.solr.SolrSearchEngineQueryExecutor
 
 class VanitySearchGrailsPlugin {
 
@@ -20,11 +21,17 @@ class VanitySearchGrailsPlugin {
     }
 
     def doWithSpring = {
-        searchEngineIndexer(SolrSearchEngineIndexer){bean->
+        def solrServerInstance = new ConcurrentUpdateSolrServer(application.config.search.solr.url,
+                                                                application.config.search.solr.queueSize.toInteger(),
+                                                                application.config.search.solr.threadCount.toInteger())
+
+        searchEngineIndexer(SolrSearchEngineIndexer){
             documentSerializer = new SolrDocumentSerializer()
-            solrServer = new ConcurrentUpdateSolrServer(application.config.search.solr.url,
-                                                        application.config.search.solr.queueSize.toInteger(),
-                                                        application.config.search.solr.threadCount.toInteger())
+            solrServer = solrServerInstance
+        }
+
+        searchEngineQueryExecutor(SolrSearchEngineQueryExecutor){
+            solrServer = solrServerInstance
         }
     }
 
