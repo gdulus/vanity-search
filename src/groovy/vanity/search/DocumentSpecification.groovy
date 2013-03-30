@@ -2,7 +2,7 @@ package vanity.search
 
 final class DocumentSpecification {
 
-    public static final class Aricle {
+    public static final class Article {
 
         public static final String ID_FIELD = 'id'
 
@@ -12,7 +12,7 @@ final class DocumentSpecification {
 
         public static final String TAGS_FIELD = 'tags'
 
-        public static final String CONTENT_FIELD = 'content'
+        public static final String BODY_FIELD = 'text'
 
         public static final String CREATED_FIELD = 'created'
 
