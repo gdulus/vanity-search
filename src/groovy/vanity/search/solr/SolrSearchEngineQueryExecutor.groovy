@@ -5,7 +5,7 @@ import org.apache.solr.client.solrj.SolrServer
 import org.apache.solr.client.solrj.response.QueryResponse
 import org.apache.solr.common.SolrDocument
 import org.apache.solr.common.SolrDocumentList
-import vanity.ContentSource
+import static vanity.article.ContentSource.Target
 import vanity.search.ArticleSearchResult
 import vanity.search.DocumentSpecification
 import vanity.search.SearchEngineQueryExecutor
@@ -13,6 +13,14 @@ import vanity.search.SearchEngineQueryExecutor
 class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
 
     SolrServer solrServer
+
+    private static ArticleSearchResult getAsArticleSearchResult(final SolrDocument solrDocument){
+        return new ArticleSearchResult(
+            (String)solrDocument.getFieldValue(DocumentSpecification.Article.ID_FIELD),
+            (String)solrDocument.getFieldValue(DocumentSpecification.Article.TITLE_FIELD),
+            Target.valueOf((String)solrDocument.getFieldValue(DocumentSpecification.Article.SOURCE_FIELD))
+        )
+    }
 
     List<ArticleSearchResult> getArticles(final String queryString) {
         if (!queryString){
@@ -26,17 +34,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         query.add('sort', 'score desc, created desc')
         QueryResponse response = solrServer.query(query)
         SolrDocumentList list = response.getResults();
-        return list.collect {
-            getAsArticleSearchResult(it)
-        }
-    }
-
-    private ArticleSearchResult getAsArticleSearchResult(final SolrDocument solrDocument){
-        return new ArticleSearchResult(
-            (String)solrDocument.getFieldValue(DocumentSpecification.Article.ID_FIELD),
-            (String)solrDocument.getFieldValue(DocumentSpecification.Article.TITLE_FIELD),
-            ContentSource.valueOf((String)solrDocument.getFieldValue(DocumentSpecification.Article.SOURCE_FIELD))
-        )
+        return list.collect {getAsArticleSearchResult(it)}
     }
 
 }

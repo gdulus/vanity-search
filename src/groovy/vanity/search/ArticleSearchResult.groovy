@@ -1,6 +1,6 @@
 package vanity.search
 
-import vanity.ContentSource
+import static vanity.article.ContentSource.Target
 
 class ArticleSearchResult {
 
@@ -8,11 +8,11 @@ class ArticleSearchResult {
 
     final String title
 
-    final ContentSource source
+    final Target contentSourceTarget
 
-    ArticleSearchResult(String id, String title, ContentSource source) {
+    ArticleSearchResult(String id, String title, Target contentSourceTarget) {
         this.id = id
         this.title = title
-        this.source = source
+        this.contentSourceTarget = contentSourceTarget
     }
 }

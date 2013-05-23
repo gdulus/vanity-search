@@ -1,5 +1,7 @@
 package vanity.search
 
+import static vanity.article.ContentSource.Target
+
 final class ArticleDocument {
 
     final String id
@@ -8,17 +10,17 @@ final class ArticleDocument {
 
     final String body
 
-    final String source
+    final Target contentSourceTarget
 
     final Date created
 
     final Set<String> tags
 
-    ArticleDocument(String id, String title, String body, String source, Date created, Set<String> tags) {
+    ArticleDocument(String id, String title, String body, Target contentSourceTarget, Date created, Set<String> tags) {
         this.id = id
         this.title = title
         this.body = body
-        this.source = source
+        this.contentSourceTarget = contentSourceTarget
         this.created = created
         this.tags = tags
     }
