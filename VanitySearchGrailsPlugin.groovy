@@ -1,7 +1,9 @@
+import org.springframework.aop.scope.ScopedProxyFactoryBean
 import vanity.search.solr.CustomSolrServer
 import vanity.search.solr.SolrDocumentSerializer
 import vanity.search.solr.SolrSearchEngineIndexer
 import vanity.search.solr.SolrSearchEngineQueryExecutor
+
 
 class VanitySearchGrailsPlugin {
 
@@ -12,7 +14,7 @@ class VanitySearchGrailsPlugin {
     def dependsOn = [:]
 
     def pluginExcludes = [
-       "grails-app/views/error.gsp"
+        "grails-app/views/error.gsp"
     ]
 
     def title = "Vanity Search Plugin"
@@ -22,23 +24,27 @@ class VanitySearchGrailsPlugin {
 
     def doWithSpring = {
 
-        solrServerPrototypeBean(CustomSolrServer) {bean->
+        solrArticleServer(CustomSolrServer) { bean ->
+            String url = "${application.config.search.solr.url}/${application.config.search.solr.articleIndexs}"
+            int queueSize = application.config.search.solr.queueSize.toInteger()
+            int threadCount = application.config.search.solr.threadCount.toInteger()
+            bean.constructorArgs = [url, queueSize, threadCount]
             bean.scope = 'prototype'
         }
 
-        solrServerProxy(org.springframework.aop.scope.ScopedProxyFactoryBean) {bean ->
+        solrArticleServerProxy(ScopedProxyFactoryBean) { bean ->
             bean.scope = 'singleton'
-            targetBeanName = 'solrServerPrototypeBean'
+            targetBeanName = 'solrArticleServer'
             proxyTargetClass = true
         }
 
-        searchEngineIndexer(SolrSearchEngineIndexer){bean->
+        searchEngineIndexer(SolrSearchEngineIndexer) { bean ->
             documentSerializer = new SolrDocumentSerializer()
-            solrServer = ref('solrServerProxy')
+            solrServer = ref('solrArticleServerProxy')
         }
 
-        searchEngineQueryExecutor(SolrSearchEngineQueryExecutor){bean->
-            solrServer = ref('solrServerProxy')
+        searchEngineQueryExecutor(SolrSearchEngineQueryExecutor) { bean ->
+            solrServer = ref('solrArticleServerProxy')
         }
     }
 

@@ -1,6 +1,5 @@
 package vanity.search.solr
 
-import static grails.util.Holders.config
 import groovy.transform.InheritConstructors
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
 
@@ -13,6 +12,6 @@ import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrServer
 class CustomSolrServer extends ConcurrentUpdateSolrServer {
 
     CustomSolrServer() {
-        super(config.search.solr.url, config.search.solr.queueSize.toInteger(), config.search.solr.threadCount.toInteger())
+        super("http://mockurl/", 1, 1)
     }
 }
