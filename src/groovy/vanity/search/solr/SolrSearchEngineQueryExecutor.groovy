@@ -1,33 +1,31 @@
 package vanity.search.solr
 
 import org.apache.solr.client.solrj.SolrQuery
-import org.apache.solr.client.solrj.SolrServer
 import org.apache.solr.client.solrj.response.QueryResponse
 import org.apache.solr.common.SolrDocument
 import org.apache.solr.common.SolrDocumentList
-import vanity.search.ArticleSearchResult
 import vanity.search.DocumentSpecification
+import vanity.search.Index
 import vanity.search.SearchEngineQueryExecutor
-
-import static vanity.article.ContentSource.Target
+import vanity.search.SearchResult
 
 class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
 
-    SolrServer solrServer
+    SolrServersRepository solrServersRepository
 
     @Override
-    List<ArticleSearchResult> getArticlesByQuery(final String query) {
+    List<SearchResult.ArticleSearchResult> getArticlesByQuery(final String query) {
         executeArticleQuery(query)
     }
 
     @Override
-    List<ArticleSearchResult> getArticlesByTagName(final String tagName) {
+    List<SearchResult.ArticleSearchResult> getArticlesByTagName(final String tagName) {
         executeArticleQuery(tagName)
     }
 
-    private List<ArticleSearchResult> executeArticleQuery(final String searchTerm) {
+    private List<SearchResult.ArticleSearchResult> executeArticleQuery(final String searchTerm) {
         if (!searchTerm) {
-            return Collections.<ArticleSearchResult> emptyList()
+            return Collections.<SearchResult.ArticleSearchResult> emptyList()
         }
 
         SolrQuery solrQuery = new SolrQuery();
@@ -36,20 +34,19 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.add('qf', "$DocumentSpecification.Article.TAGS_FIELD^5 $DocumentSpecification.Article.TITLE_FIELD $DocumentSpecification.Article.BODY_FIELD^0.5")
         solrQuery.add('pf', "$DocumentSpecification.Article.TAGS_FIELD^5 $DocumentSpecification.Article.TITLE_FIELD $DocumentSpecification.Article.BODY_FIELD^0.5")
         solrQuery.add('sort', 'score desc, created desc')
-        QueryResponse response = solrServer.query(solrQuery)
+        QueryResponse response = solrServersRepository.getServer(Index.ARTICLE).query(solrQuery)
         SolrDocumentList list = response.getResults();
         return list.collect { getAsArticleSearchResult(it) }
     }
 
-    private ArticleSearchResult getAsArticleSearchResult(final SolrDocument solrDocument) {
-        return new ArticleSearchResult(
+    private static SearchResult.ArticleSearchResult getAsArticleSearchResult(final SolrDocument solrDocument) {
+        return new SearchResult.ArticleSearchResult(
             (String) solrDocument.getFieldValue(DocumentSpecification.Article.ID_FIELD),
-            (String) solrDocument.getFieldValue(DocumentSpecification.Article.TITLE_FIELD),
-            Target.valueOf((String) solrDocument.getFieldValue(DocumentSpecification.Article.SOURCE_FIELD))
+            (String) solrDocument.getFieldValue(DocumentSpecification.Article.TITLE_FIELD)
         )
     }
 
-    private String prepareSearchTerm(final String searchTerm) {
+    private static String prepareSearchTerm(final String searchTerm) {
         searchTerm.tokenize().collect { "$it*" }.join(' ')
     }
 

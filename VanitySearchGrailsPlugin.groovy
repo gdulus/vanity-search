@@ -1,9 +1,8 @@
 import org.springframework.aop.scope.ScopedProxyFactoryBean
 import vanity.search.solr.CustomSolrServer
-import vanity.search.solr.SolrDocumentSerializer
 import vanity.search.solr.SolrSearchEngineIndexer
 import vanity.search.solr.SolrSearchEngineQueryExecutor
-
+import vanity.search.solr.SolrServersRepository
 
 class VanitySearchGrailsPlugin {
 
@@ -32,19 +31,32 @@ class VanitySearchGrailsPlugin {
             bean.scope = 'prototype'
         }
 
-        solrArticleServerProxy(ScopedProxyFactoryBean) { bean ->
-            bean.scope = 'singleton'
-            targetBeanName = 'solrArticleServer'
-            proxyTargetClass = true
+        solrTagsServer(CustomSolrServer) { bean ->
+            String url = "${application.config.search.solr.url}/${application.config.search.solr.tagsIndexs}"
+            int queueSize = application.config.search.solr.queueSize.toInteger()
+            int threadCount = application.config.search.solr.threadCount.toInteger()
+            bean.constructorArgs = [url, queueSize, threadCount]
+            bean.scope = 'prototype'
         }
 
-        searchEngineIndexer(SolrSearchEngineIndexer) { bean ->
-            documentSerializer = new SolrDocumentSerializer()
-            solrServer = ref('solrArticleServerProxy')
+        solrServersRepository(SolrServersRepository) {
+            articleServer = { ScopedProxyFactoryBean bean ->
+                targetBeanName = 'solrArticleServer'
+                proxyTargetClass = true
+            }
+
+            tagsServer = { ScopedProxyFactoryBean bean ->
+                targetBeanName = 'solrTagsServer'
+                proxyTargetClass = true
+            }
         }
 
-        searchEngineQueryExecutor(SolrSearchEngineQueryExecutor) { bean ->
-            solrServer = ref('solrArticleServerProxy')
+        searchEngineIndexer(SolrSearchEngineIndexer) {
+            solrServersRepository = ref('solrServersRepository')
+        }
+
+        searchEngineQueryExecutor(SolrSearchEngineQueryExecutor) {
+            solrServersRepository = ref('solrServersRepository')
         }
     }
 

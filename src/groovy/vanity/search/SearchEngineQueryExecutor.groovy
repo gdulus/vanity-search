@@ -2,8 +2,8 @@ package vanity.search
 
 public interface SearchEngineQueryExecutor {
 
-    public List<ArticleSearchResult> getArticlesByQuery(final String query)
+    public List<SearchResult.ArticleSearchResult> getArticlesByQuery(final String query)
 
-    public List<ArticleSearchResult> getArticlesByTagName(final String tagName)
+    public List<SearchResult.ArticleSearchResult> getArticlesByTagName(final String tagName)
 
 }

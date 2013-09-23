@@ -18,4 +18,14 @@ final class DocumentSpecification {
 
     }
 
+    public static final class Tag {
+
+        public static final String ID_FIELD = 'id'
+
+        public static final String NAME_FIELD = 'name'
+
+        public static final String CHILDREN_FIELD = 'children'
+
+    }
+
 }
