@@ -2,27 +2,30 @@ package vanity.search
 
 final class SearchResult {
 
-    static final class ArticleSearchResult {
+    public static final SearchResult EMPTY = new SearchResult(0, 0, [])
+
+    final Long numFound
+
+    final Long start
+
+    final List<SearchResultItem> items
+
+    SearchResult(Long numFound, Long start, List<SearchResultItem> items) {
+        this.numFound = numFound
+        this.start = start
+        this.items = items
+    }
+
+    public static final class SearchResultItem {
 
         final String id
 
-        final String title
+        final String description
 
-        ArticleSearchResult(String id, String title) {
+        SearchResultItem(String id, String description) {
             this.id = id
-            this.title = title
+            this.description = description
         }
     }
 
-    static final class TagSearchResult {
-
-        final String id
-
-        final String name
-
-        TagSearchResult(String id, String name) {
-            this.id = id
-            this.name = name
-        }
-    }
 }
