@@ -1,5 +1,7 @@
 package vanity.search
 
+import groovy.transform.ToString
+
 final class SearchResult {
 
     public static final SearchResult EMPTY = new SearchResult(0, 0, [])
@@ -16,6 +18,7 @@ final class SearchResult {
         this.items = items
     }
 
+    @ToString
     public static final class SearchResultItem {
 
         final String id
