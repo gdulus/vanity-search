@@ -16,12 +16,8 @@ grails.project.dependency.resolution = {
         mavenCentral()
     }
     dependencies {
-        // http://jira.grails.org/browse/GRAILS-9984
-        // for some reason this doesn't work - jar included in lib folder
-        // jar is resolved but not included into plugin classpath
-        // TODO: resolve this plugin with default artifact dependency mechanism
-        compile('org.apache.solr:solr-solrj:4.1.0'){
-            exclude group:'org.slf4j'
+        compile('org.apache.solr:solr-solrj:4.1.0') {
+            exclude group: 'org.slf4j'
             exclude group: 'commons-codec'
         }
         compile('org.apache.httpcomponents:httpclient:4.2.5')
