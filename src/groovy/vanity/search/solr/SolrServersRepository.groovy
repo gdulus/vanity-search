@@ -11,9 +11,9 @@ class SolrServersRepository {
 
     public SolrServer getServer(final Index index) {
         switch (index) {
-            case Index.ARTICLE:
+            case Index.ARTICLE_ALL:
                 return articleServer
-            case Index.TAG:
+            case Index.TAG_ALL:
                 return tagsServer
         }
 

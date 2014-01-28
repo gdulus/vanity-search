@@ -22,7 +22,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     public void indexArticles(final Set<Document.ArticleDocument> articleDocuments) {
         Validate.notEmpty((Set) articleDocuments, 'Documents set null or empty')
         List<SolrInputDocument> inputDocuments = articleDocuments.collect { serializeArticleDocument(it) }
-        add(Index.ARTICLE, inputDocuments)
+        add(Index.ARTICLE_ALL, inputDocuments)
     }
 
     @Override
@@ -34,7 +34,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     @Override
     void deleteArticles(final Set<Document.ArticleDocument> articleDocuments) {
         Validate.notEmpty((Set) articleDocuments, 'Documents set null or empty')
-        delete(Index.ARTICLE, articleDocuments.collect { it.id })
+        delete(Index.ARTICLE_ALL, articleDocuments.collect { it.id })
     }
 
     @Override
@@ -47,7 +47,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     void indexTags(final Set<Document.TagDocument> tagDocuments) {
         Validate.notEmpty((Set) tagDocuments, 'Documents set null or empty')
         List<SolrInputDocument> inputDocuments = tagDocuments.collect { serializeTagDocument(it) }
-        add(Index.TAG, inputDocuments)
+        add(Index.TAG_ALL, inputDocuments)
     }
 
     @Override
@@ -59,7 +59,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     @Override
     void deleteTags(final Set<Document.TagDocument> tagDocuments) {
         Validate.notEmpty((Set) tagDocuments, 'Documents set null or empty')
-        delete(Index.TAG, tagDocuments.collect { it.id })
+        delete(Index.TAG_ALL, tagDocuments.collect { it.id })
     }
 
     private static SolrInputDocument serializeArticleDocument(final Document.ArticleDocument articleDocument) {
