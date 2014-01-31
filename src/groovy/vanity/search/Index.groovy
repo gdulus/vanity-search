@@ -2,12 +2,10 @@ package vanity.search
 
 enum Index {
 
-    ARTICLE_ALL,
+    ARTICLE_UPDATE,
 
-    TAG_ALL,
+    TAG_UPDATE,
 
-    ARTICLE_PARTIAL,
-
-    TAG_PARTIAL
+    ARTICLE_REMOVE
 
 }
