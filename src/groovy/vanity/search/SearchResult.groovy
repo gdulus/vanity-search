@@ -21,11 +21,11 @@ final class SearchResult {
     @ToString
     public static final class SearchResultItem {
 
-        final String id
+        final Long id
 
         final String description
 
-        SearchResultItem(String id, String description) {
+        SearchResultItem(Long id, String description) {
             this.id = id
             this.description = description
         }

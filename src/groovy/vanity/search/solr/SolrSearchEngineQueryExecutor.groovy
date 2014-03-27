@@ -27,7 +27,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.add('qf', "$DSA.TAGS_FIELD^5 $DSA.TITLE_FIELD $DSA.BODY_FIELD^0.5")
         solrQuery.add('pf', "$DSA.TAGS_FIELD^5 $DSA.TITLE_FIELD $DSA.BODY_FIELD^0.5")
         solrQuery.add('sort', "score desc, $DSA.CREATED_FIELD desc")
-        QueryResponse response = solrServersRepository.getServer(Index.ARTICLE_UPDATE).query(solrQuery)
+        QueryResponse response = solrServersRepository.getServer(Index.ARTICLES).query(solrQuery)
         SolrDocumentList result = response.getResults();
 
         List<SearchResult.SearchResultItem> items = result.collect { getAsArticleSearchResultItems(it) }
@@ -36,7 +36,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
 
     private static SearchResult.SearchResultItem getAsArticleSearchResultItems(final SolrDocument solrDocument) {
         return new SearchResult.SearchResultItem(
-            (String) solrDocument.getFieldValue(DSA.ID_FIELD),
+            (Long) solrDocument.getFieldValue(DSA.ID_FIELD),
             (String) solrDocument.getFieldValue(DSA.TITLE_FIELD)
         )
     }
@@ -51,11 +51,12 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.start = start
         solrQuery.rows = rows
         solrQuery.add('defType', 'edismax');
-        solrQuery.add('q', prepareSearchTerm(query))
+        solrQuery.add('q', query)
+        solrQuery.add('mm', '2')
         solrQuery.add('qf', "$DST.NAME_FIELD^5 $DST.CHILDREN_FIELD")
         solrQuery.add('pf', "$DST.NAME_FIELD^5 $DST.CHILDREN_FIELD")
         solrQuery.add('sort', "score desc, $DST.NAME_FIELD desc")
-        QueryResponse response = solrServersRepository.getServer(Index.TAG_UPDATE).query(solrQuery)
+        QueryResponse response = solrServersRepository.getServer(Index.TAGS).query(solrQuery)
         SolrDocumentList result = response.getResults();
 
         List<SearchResult.SearchResultItem> items = result.collect { getAsTagSearchResultItems(it) }
@@ -64,7 +65,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
 
     private static SearchResult.SearchResultItem getAsTagSearchResultItems(final SolrDocument solrDocument) {
         return new SearchResult.SearchResultItem(
-            (String) solrDocument.getFieldValue(DST.ID_FIELD),
+            (Long) solrDocument.getFieldValue(DST.ID_FIELD),
             (String) solrDocument.getFieldValue(DST.NAME_FIELD)
         )
     }

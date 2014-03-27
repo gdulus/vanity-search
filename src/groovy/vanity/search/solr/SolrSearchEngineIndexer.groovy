@@ -22,7 +22,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     public void indexArticles(final Set<Document.ArticleDocument> articleDocuments) {
         Validate.notEmpty((Set) articleDocuments, 'Documents set null or empty')
         List<SolrInputDocument> inputDocuments = articleDocuments.collect { serializeArticleDocument(it) }
-        add(Index.ARTICLE_UPDATE, inputDocuments)
+        add(Index.ARTICLES, inputDocuments)
     }
 
     @Override
@@ -34,7 +34,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     @Override
     void deleteArticles(final Set<Document.ArticleDocument> articleDocuments) {
         Validate.notEmpty((Set) articleDocuments, 'Documents set null or empty')
-        delete(Index.ARTICLE_UPDATE, articleDocuments.collect { it.id })
+        delete(Index.ARTICLES, articleDocuments.collect { it.hash })
     }
 
     @Override
@@ -47,7 +47,7 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     void indexTags(final Set<Document.TagDocument> tagDocuments) {
         Validate.notEmpty((Set) tagDocuments, 'Documents set null or empty')
         List<SolrInputDocument> inputDocuments = tagDocuments.collect { serializeTagDocument(it) }
-        add(Index.TAG_UPDATE, inputDocuments)
+        add(Index.TAGS, inputDocuments)
     }
 
     @Override
@@ -59,11 +59,12 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
     @Override
     void deleteTags(final Set<Document.TagDocument> tagDocuments) {
         Validate.notEmpty((Set) tagDocuments, 'Documents set null or empty')
-        delete(Index.TAG_UPDATE, tagDocuments.collect { it.id })
+        delete(Index.TAGS, tagDocuments.collect { it.hash })
     }
 
-    private static SolrInputDocument serializeArticleDocument(final Document.ArticleDocument articleDocument) {
+    private SolrInputDocument serializeArticleDocument(final Document.ArticleDocument articleDocument) {
         SolrInputDocument document = new SolrInputDocument();
+        document.addField(DocumentSpecification.Article.HASH_FIELD, articleDocument.hash)
         document.addField(DocumentSpecification.Article.ID_FIELD, articleDocument.id)
         document.addField(DocumentSpecification.Article.TITLE_FIELD, articleDocument.title)
         document.addField(DocumentSpecification.Article.BODY_FIELD, articleDocument.body)
@@ -72,8 +73,9 @@ class SolrSearchEngineIndexer implements SearchEngineIndexer {
         return document
     }
 
-    private static SolrInputDocument serializeTagDocument(final Document.TagDocument tagDocument) {
+    private SolrInputDocument serializeTagDocument(final Document.TagDocument tagDocument) {
         SolrInputDocument document = new SolrInputDocument();
+        document.addField(DocumentSpecification.Tag.HASH_FIELD, tagDocument.hash);
         document.addField(DocumentSpecification.Tag.ID_FIELD, tagDocument.id);
         document.addField(DocumentSpecification.Tag.NAME_FIELD, tagDocument.name);
         document.addField(DocumentSpecification.Tag.CHILDREN_FIELD, tagDocument.children);

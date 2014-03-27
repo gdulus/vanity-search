@@ -4,6 +4,8 @@ final class DocumentSpecification {
 
     public static final class Article {
 
+        public static final String HASH_FIELD = 'hash'
+
         public static final String ID_FIELD = 'id'
 
         public static final String TITLE_FIELD = 'title'
@@ -17,6 +19,8 @@ final class DocumentSpecification {
     }
 
     public static final class Tag {
+
+        public static final String HASH_FIELD = 'hash'
 
         public static final String ID_FIELD = 'id'
 
