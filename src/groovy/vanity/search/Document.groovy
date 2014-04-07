@@ -1,6 +1,7 @@
 package vanity.search
 
 import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 import vanity.article.Article
 import vanity.article.ContentSource
 import vanity.article.Tag
@@ -8,6 +9,7 @@ import vanity.article.Tag
 final class Document {
 
     @EqualsAndHashCode(includes = ['id'])
+    @ToString
     public final static class ArticleDocument {
 
         final String hash
@@ -35,6 +37,7 @@ final class Document {
         }
     }
 
+    @ToString
     @EqualsAndHashCode(includes = ['id'])
     public static final class TagDocument {
 

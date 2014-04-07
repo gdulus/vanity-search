@@ -14,6 +14,28 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
 
     SolrServersRepository solrServersRepository
 
+    @Override
+    SearchResult findArticlesByTag(final String tagName, final Integer start, final Integer rows) {
+        if (!tagName) {
+            return SearchResult.EMPTY
+        }
+
+        SolrQuery solrQuery = new SolrQuery();
+        solrQuery.start = start
+        solrQuery.rows = rows
+        solrQuery.add('defType', 'edismax');
+        solrQuery.add('q', tagName)
+        solrQuery.add('qf', "$DSA.TAGS_FIELD^10 $DSA.TITLE_FIELD^5")
+        solrQuery.add('pf', "$DSA.TAGS_FIELD^10 $DSA.TITLE_FIELD^5")
+        solrQuery.add('mm', '2')
+        solrQuery.add('sort', "score desc, $DSA.CREATED_FIELD desc")
+        QueryResponse response = solrServersRepository.getServer(Index.ARTICLES).query(solrQuery)
+        SolrDocumentList result = response.getResults();
+
+        List<SearchResult.SearchResultItem> items = result.collect { getAsArticleSearchResultItems(it) }
+        return new SearchResult(result.numFound, result.start, items)
+    }
+
     public SearchResult findArticles(final String query, final Integer start, final Integer rows) {
         if (!query) {
             return SearchResult.EMPTY
