@@ -776,7 +776,7 @@
             <str name="df">name</str>
         </lst>
         <!-- In addition to defaults, "appends" params can be specified
-             to identify values which should be appended to the findAll of
+             to identify values which should be appended to the list of
              multi-val params from the query (or the existing "defaults").
           -->
         <!-- In this example, the param "fq=instock:true" would be appended to
@@ -817,9 +817,9 @@
              <str name="facet.query">price:[500 TO *]</str>
            </lst>
           -->
-        <!-- If the default findAll of SearchComponents is not desired, that
-             findAll can either be overridden completely, or components can be
-             prepended or appended to the default findAll.  (see below)
+        <!-- If the default list of SearchComponents is not desired, that
+             list can either be overridden completely, or components can be
+             prepended or appended to the default list.  (see below)
           -->
         <!--
            <arr name="components">
@@ -1103,7 +1103,7 @@
 
     <!-- Spell Check
 
-         The spell check component can return a findAll of alternative spelling
+         The spell check component can return a list of alternative spelling
          suggestions.
 
          http://wiki.apache.org/solr/SpellCheckComponent
@@ -1177,7 +1177,7 @@
              <str name="comparatorClass">freq</str>
           -->
 
-        <!-- A spellchecker that reads the findAll of words from a file -->
+        <!-- A spellchecker that reads the list of words from a file -->
         <!--
            <lst name="spellchecker">
              <str name="classname">solr.FileBasedSpellChecker</str>
@@ -1306,7 +1306,7 @@
 
             <!-- The language to assume for the documents.
 
-                 For a findAll of allowed values, see:
+                 For a list of allowed values, see:
                  http://download.carrot2.org/stable/manual/#section.attribute.lingo.MultilingualClustering.defaultLanguage
              -->
             <str name="MultilingualClustering.defaultLanguage">ENGLISH</str>
