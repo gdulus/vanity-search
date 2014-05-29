@@ -12,6 +12,8 @@ final class Document {
     @ToString
     public final static class ArticleDocument {
 
+        final Boolean validForIndexing
+
         final String hash
 
         final Long id
@@ -27,6 +29,11 @@ final class Document {
         final Set<String> tags
 
         private ArticleDocument(String hash, Long id, String title, String body, Date created, Set<String> tags) {
+            this(true, hash, id, title, body, created, tags)
+        }
+
+        private ArticleDocument(final Boolean validForIndexing, String hash, Long id, String title, String body, Date created, Set<String> tags) {
+            this.validForIndexing = validForIndexing
             this.hash = hash
             this.id = id
             this.title = title
@@ -51,6 +58,14 @@ final class Document {
 
         final Set<String> children
 
+        private TagDocument(String hash, Long id, String name, Set<String> children) {
+            this.validForIndexing = validForIndexing
+            this.hash = hash
+            this.id = id
+            this.name = name
+            this.children = children
+        }
+
         private TagDocument(final Boolean validForIndexing, String hash, Long id, String name, Set<String> children) {
             this.validForIndexing = validForIndexing
             this.hash = hash
@@ -61,7 +76,7 @@ final class Document {
     }
 
     public static ArticleDocument asArticleDocument(final Article article) {
-        return new ArticleDocument(article.hash, article.id, article.title, article.body, article.publicationDate, article.flatTagSet())
+        return new ArticleDocument(article.searchable(), article.hash, article.id, article.title, article.body, article.publicationDate, article.flatTagSet())
     }
 
     public static Set<ArticleDocument> asArticleDocuments(final List<Article> articles) {
