@@ -41,6 +41,8 @@ final class Document {
     @EqualsAndHashCode(includes = ['id'])
     public static final class TagDocument {
 
+        final Boolean root
+
         final String hash
 
         final Long id
@@ -50,6 +52,11 @@ final class Document {
         final Set<String> children
 
         private TagDocument(String hash, Long id, String name, Set<String> children) {
+            this(true, hash, id, name, children)
+        }
+
+        private TagDocument(final Boolean root, String hash, Long id, String name, Set<String> children) {
+            this.root = root
             this.hash = hash
             this.id = id
             this.name = name
@@ -66,7 +73,7 @@ final class Document {
     }
 
     public static TagDocument asTagDocument(final Tag tag) {
-        return new TagDocument(tag.hash, tag.id, tag.name, tag.flatChildrenSet())
+        return new TagDocument(tag.root, tag.hash, tag.id, tag.name, tag.flatChildrenSet())
     }
 
     public static Set<TagDocument> asTagDocuments(final List<Tag> tags) {
