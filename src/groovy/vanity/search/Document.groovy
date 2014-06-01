@@ -57,20 +57,12 @@ final class Document {
         }
     }
 
-    public static ArticleDocument asArticleDocument(final Article article) {
-        return new ArticleDocument(article.hash, article.id, article.title, article.body, article.publicationDate, article.flatTagSet())
+    public static ArticleDocument asArticleDocument(final Article article, final Set<Tag> associatedTagsHierarchy) {
+        return new ArticleDocument(article.hash, article.id, article.title, article.body, article.publicationDate, associatedTagsHierarchy.collect { it.name } as Set)
     }
 
-    public static Set<ArticleDocument> asArticleDocuments(final List<Article> articles) {
-        return articles ? articles.collect { asArticleDocument(it) } as Set : Collections.emptySet()
-    }
-
-    public static TagDocument asTagDocument(final Tag tag) {
-        return new TagDocument(tag.hash, tag.id, tag.name, tag.flatChildrenSet())
-    }
-
-    public static Set<TagDocument> asTagDocuments(final List<Tag> tags) {
-        return tags ? tags.collect { asTagDocument(it) } as Set : Collections.emptySet()
+    public static TagDocument asTagDocument(final Tag tag, final Set<Tag> associatedTagsHierarchy) {
+        return new TagDocument(tag.hash, tag.id, tag.name, associatedTagsHierarchy.collect { it.name } as Set)
     }
 
 }
