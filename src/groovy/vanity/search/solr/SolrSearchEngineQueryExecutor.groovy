@@ -27,8 +27,8 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.add('q', tagName)
         solrQuery.add('qf', "$DSA.TAGS_FIELD^10 $DSA.TITLE_FIELD^5")
         solrQuery.add('pf', "$DSA.TAGS_FIELD^10 $DSA.TITLE_FIELD^5")
-        solrQuery.add('mm', '2')
-        solrQuery.add('sort', "score desc, $DSA.CREATED_FIELD desc")
+        solrQuery.add('mm', '3')
+        solrQuery.add('sort', "$DSA.CREATED_FIELD desc, score desc")
         QueryResponse response = solrServersRepository.getServer(Index.ARTICLES).query(solrQuery)
         SolrDocumentList result = response.getResults();
 
@@ -48,7 +48,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.add('q', prepareSearchTerm(query))
         solrQuery.add('qf', "$DSA.TAGS_FIELD^5 $DSA.TITLE_FIELD $DSA.BODY_FIELD^0.5")
         solrQuery.add('pf', "$DSA.TAGS_FIELD^5 $DSA.TITLE_FIELD $DSA.BODY_FIELD^0.5")
-        solrQuery.add('sort', "score desc, $DSA.CREATED_FIELD desc")
+        solrQuery.add('sort', "$DSA.CREATED_FIELD desc, score desc")
         QueryResponse response = solrServersRepository.getServer(Index.ARTICLES).query(solrQuery)
         SolrDocumentList result = response.getResults();
 
@@ -77,7 +77,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.add('mm', '2')
         solrQuery.add('qf', "$DST.NAME_FIELD^5 $DST.CHILDREN_FIELD")
         solrQuery.add('pf', "$DST.NAME_FIELD^5 $DST.CHILDREN_FIELD")
-        solrQuery.add('sort', "score desc, $DST.NAME_FIELD desc")
+        solrQuery.add('sort', "$DST.NAME_FIELD desc, score desc")
         QueryResponse response = solrServersRepository.getServer(Index.TAGS).query(solrQuery)
         SolrDocumentList result = response.getResults();
 
