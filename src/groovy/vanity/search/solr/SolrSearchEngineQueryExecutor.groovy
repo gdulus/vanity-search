@@ -27,7 +27,7 @@ class SolrSearchEngineQueryExecutor implements SearchEngineQueryExecutor {
         solrQuery.add('q', tagName)
         solrQuery.add('qf', "$DSA.TAGS_FIELD^10 $DSA.TITLE_FIELD^5")
         solrQuery.add('pf', "$DSA.TAGS_FIELD^10 $DSA.TITLE_FIELD^5")
-        solrQuery.add('mm', '3')
+        solrQuery.add('mm', '2')
         solrQuery.add('sort', "$DSA.CREATED_FIELD desc, score desc")
         QueryResponse response = solrServersRepository.getServer(Index.ARTICLES).query(solrQuery)
         SolrDocumentList result = response.getResults();
