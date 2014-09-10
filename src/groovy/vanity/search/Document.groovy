@@ -8,7 +8,7 @@ import vanity.article.Tag
 
 final class Document {
 
-    @ToString
+    @ToString(includes = ['title', 'children'])
     @EqualsAndHashCode(includes = ['id'])
     public final static class ArticleDocument {
 
@@ -37,7 +37,7 @@ final class Document {
         }
     }
 
-    @ToString
+    @ToString(includes = ['name', 'children'])
     @EqualsAndHashCode(includes = ['id'])
     public static final class TagDocument {
 
@@ -55,6 +55,7 @@ final class Document {
             this.name = name
             this.children = children
         }
+
     }
 
     public static ArticleDocument asArticleDocument(final Article article, final Set<Tag> associatedTagsHierarchy) {
