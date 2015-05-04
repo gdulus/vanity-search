@@ -14,6 +14,9 @@ grails.project.dependency.resolution = {
         grailsCentral()
         mavenLocal()
         mavenCentral()
+        mavenRepo "http://repo.grails.org/grails/plugins"
+        mavenRepo "http://repo.grails.org/grails/core"
+        mavenRepo "http://repo.spring.io/milestone/"
     }
     dependencies {
         compile('org.apache.solr:solr-solrj:4.1.0') {
